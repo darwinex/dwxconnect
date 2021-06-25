@@ -15,7 +15,7 @@ This class includes all of the functions needed for communication with MT4/MT5.
 """
 
 
-class DWX_Client():
+class dwx_client():
 
     def __init__(self, event_handler=None, metatrader_dir_path='', 
                  sleep_delay=0.005,             # 5 ms for time.sleep()

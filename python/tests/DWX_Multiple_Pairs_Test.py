@@ -9,12 +9,12 @@ from random import random
 from datetime import datetime, timedelta
 
 sys.path.append('../')
-from api.DWX_Client import DWX_Client
+from api.dwx_client import dwx_client
 
 
 """
 
-Example DWX_Connect client to test subscribing to many pairs. 
+Example dwxconnect client to test subscribing to many pairs. 
 
 """
 
@@ -29,7 +29,7 @@ class TickProcessor():
         self.last_open_time = datetime.utcnow()
         self.last_modification_time = datetime.utcnow()
 
-        self.dwx = DWX_Client(self, MT4_directory_path, sleep_delay, 
+        self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
         sleep(1)
 
@@ -73,7 +73,7 @@ class TickProcessor():
         self.n_ticks += 1
 
         # to compare this to MT4 we have to add code in the DWX_Server.mq4 file. 
-        # also change to "if True" before remove the on_tick() call in DWX_Client.py
+        # also change to "if True" before remove the on_tick() call in dwx_client.py
         if now > self.last_print_time + timedelta(seconds=2):
             self.last_print_time = now
             print(symbol, '| ticks per second per symbol:', round(self.n_ticks / (now - self.start_time).total_seconds() / len(self.symbols), 1))

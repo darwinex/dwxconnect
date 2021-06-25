@@ -36,24 +36,24 @@ For simplicity, we will refer to the non-mql side of this project as the "Python
 1. If you are using python, you can just install the package via pip:
 
     ```console
-    pip install DWX_Connect
+    pip install dwxconnect
     ```
 
     For java or C#, please download the code from the GitHub repository. 
 
-1. Download the MT4/MT5 server EA (DWX_Server_MT4.mq4 or DWX_Server_MT5.mq5) and copy it into the /MQL4/Experts or /MQL5/Experts directory (File -> Open Data Folder). 
+1. Download the MT4/MT5 server EA (dwx_server_mt4.mq4 or dwx_server_mt5.mq5) and copy it into the /MQL4/Experts or /MQL5/Experts directory (File -> Open Data Folder). 
 
 1. Double click on the MT4/MT5 EA file to open it in MetaEditor. Press F7 to compile the file. Restart MT4/MT5 or rightclick -> Refresh in the Navigator window. 
 
 1. Attach the EA to any chart. Change the input parameters if needed, for example, MaximumOrders and MaximumLotSize if you want to trade larger sizes.
 
-1. Copy the [DWX_Client_Example.py](python/examples/DWX_Client_Example.py) file from the examples folder to your working directory.
+1. Copy the [dwx_client_example.py](python/examples/dwx_client_example.py) file from the examples folder to your working directory.
 
 1. Open the file and change the `MT4_files_dir` variable to the full path of the /MQL4/Files or /MQL5/Files directory. 
 
 1. The example script will just try to subscribe to EURUSD and GBPUSD, and print some information on every tick. You can run the script with:
     ```console
-    python DWX_Client_Example.py
+    python dwx_client_example.py
     ```
     If you set open_test_trades=True, it will also open multiple test trades. 
     
@@ -81,7 +81,7 @@ For simplicity, we will refer to the non-mql side of this project as the "Python
 
 ## Example Usage
 
-The best way to start is to use the [example DWX_Connect client](python/examples/DWX_Client_Example.py). It defines various functions which can be used to react to data changes from MetaTrader:
+The best way to start is to use the [example DWX_Connect client](python/examples/dwx_client_example.py). It defines various functions which can be used to react to data changes from MetaTrader:
 - **on_tick(symbol, bid, ask)** - is triggered every time the Python side registers a change in the current bid/ask prices. For easier access the symbol and the current bid/ask prices are passed along. However, you can also always access them through self.dwx.market_data from any other function. 
 - **on_bar_data(symbol, time_frame, time, open_price, high, low, close_price, tick_volume)** - is triggered when the Python side registers new bar data.
 - **on_historic_data(symbol, time_frame, data)** - is triggered when the Python side registers a response from a historic data request. 

@@ -9,7 +9,7 @@ from random import random
 from datetime import datetime, timedelta
 
 sys.path.append('../')
-from api.DWX_Client import DWX_Client
+from api.dwx_client import dwx_client
 
 
 """
@@ -37,7 +37,7 @@ class TickProcessor():
         self.last_open_time = datetime.utcnow()
         self.last_modification_time = datetime.utcnow()
 
-        self.dwx = DWX_Client(self, MT4_directory_path, sleep_delay, 
+        self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
         sleep(1)
 
