@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-using DWX_Connect;
-using static DWX_Connect.Helpers;
+using DWXConnect;
+using static DWXConnect.Helpers;
 
 /*
 
@@ -22,12 +22,11 @@ dotnet run
 
 */
 
-namespace DWX_Connect
+namespace DWXConnect
 {
     class DWXPerformanceTest
     {
-        static string MetaTraderDirPath = "C:/Users/asd/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files/";
-        // static string MetaTraderDirPath = "D:/MetaTrader5_portable/MQL5/Files/";
+        static string MetaTraderDirPath = "C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files/";
         static int sleepDelay = 5;  // 5 milliseconds
         static int maxRetryCommandSeconds = 10;
         static bool loadOrdersFromFile = true;
@@ -43,7 +42,7 @@ namespace DWX_Connect
         }
     }
 
-    class MyEventHandler : DWX_Connect.EventHandler
+    class MyEventHandler : DWXConnect.EventHandler
     {
         int n = 100;
         string symbol = "EURUSD";

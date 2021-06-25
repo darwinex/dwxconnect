@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DWX_Connect", "DWX_Connect.csproj", "{849955C4-4647-407C-B5F2-1A02E1AF256F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DWXConnect", "DWXConnect.csproj", "{849955C4-4647-407C-B5F2-1A02E1AF256F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

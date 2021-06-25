@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using DWX_Connect;
-using static DWX_Connect.Helpers;
+using DWXConnect;
+using static DWXConnect.Helpers;
 
 /*
 

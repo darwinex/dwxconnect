@@ -8,7 +8,7 @@ specific events happen, like new ticks or orders.
 An example implementation can be found in DWXExampleClient.cs. 
 */
 
-namespace DWX_Connect
+namespace DWXConnect
 {
     public interface EventHandler
     {

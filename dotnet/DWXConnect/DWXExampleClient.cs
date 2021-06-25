@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using static DWX_Connect.Helpers;
+using static DWXConnect.Helpers;
 
 /*
 
-Example DWX_Connect client in C#
+Example DWXConnect client in C#
 
 
 This example client will subscribe to tick data and bar data. 
@@ -19,7 +19,7 @@ dotnet run
 
 */
 
-namespace DWX_Connect
+namespace DWXConnect
 {
     class DWXExampleClient
     {
@@ -61,7 +61,7 @@ namespace DWX_Connect
 			// request historic data:
 			long end = DateTimeOffset.Now.ToUnixTimeSeconds();
 			long start = end - 10*24*60*60;  // last 10 days
-			dwx.getHistoricData("NZDJPY", "D1", start, end);
+			dwx.getHistoricData("EURUSD", "D1", start, end);
 			
         }
 
