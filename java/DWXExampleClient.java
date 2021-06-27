@@ -30,7 +30,7 @@ https://github.com/stleary/JSON-java
 
 public class DWXExampleClient {
     
-	final static String MetaTraderDirPath = "C:/Users/asd/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files/";
+	final static String MetaTraderDirPath = "C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files/";
 	
 	final static int sleepDelay = 5;  // 5 milliseconds
 	final static int maxRetryCommandSeconds = 10;

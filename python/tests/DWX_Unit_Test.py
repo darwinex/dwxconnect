@@ -10,13 +10,13 @@ from random import random
 from datetime import datetime, timedelta
 
 sys.path.append('../')
-from api.DWX_Client import DWX_Client
+from api.dwx_client import dwx_client
 
 
 
 """
 
-Tests to check that the DWX_Client is working correctly.  
+Tests to check that the dwx_client is working correctly.  
 
 Please don't run this on your live account. It will open and close positions!
 
@@ -33,7 +33,7 @@ sometimes it could fail if for example there is a requote, so we execute the clo
 
 class TestDWXConnect(unittest.TestCase):
 
-    """Initializes DWX_Client and closes all open orders. 
+    """Initializes dwx_client and closes all open orders. 
     """
     def setUp(self):
         
@@ -46,7 +46,7 @@ class TestDWXConnect(unittest.TestCase):
         self.SL_and_TP_offset = 0.01
         self.types = ['buy', 'sell', 'buylimit', 'selllimit', 'buystop', 'sellstop']
 
-        self.dwx = DWX_Client(None, self.MT4_directory_path, sleep_delay=0.005, 
+        self.dwx = dwx_client(None, self.MT4_directory_path, sleep_delay=0.005, 
                               max_retry_command_seconds=10, verbose=False)
         sleep(1)
 

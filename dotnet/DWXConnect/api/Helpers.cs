@@ -9,7 +9,7 @@ This class includes helper functions for printing, formatting and file operation
 
 */
 
-namespace DWX_Connect
+namespace DWXConnect
 {
     public class Helpers
     {

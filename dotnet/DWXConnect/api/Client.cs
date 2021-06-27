@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Collections;
 using Newtonsoft.Json.Linq;
-using static DWX_Connect.Helpers;
+using static DWXConnect.Helpers;
 
 
 /*Client class
@@ -12,7 +12,7 @@ This class includes all of the functions for communication with MT4/MT5.
 
 */
 
-namespace DWX_Connect
+namespace DWXConnect
 {
     public class Client
     {

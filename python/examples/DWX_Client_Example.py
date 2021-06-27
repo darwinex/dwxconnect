@@ -7,12 +7,12 @@ from traceback import print_exc
 from random import random
 from datetime import datetime, timedelta
 
-from api.DWX_Client import DWX_Client
+from api.dwx_client import dwx_client
 
 
 """
 
-Example DWX_Connect client in python
+Example dwxconnect client in python
 
 
 This example client will subscribe to tick data and bar data. It will also request historic data. 
@@ -20,7 +20,7 @@ if open_test_trades=True, it will also open trades. Please only run this on a de
 
 """
 
-class TickProcessor():
+class tick_processor():
 
     def __init__(self, MT4_directory_path, 
                  sleep_delay=0.005,             # 5 ms for time.sleep()
@@ -34,7 +34,7 @@ class TickProcessor():
         self.last_open_time = datetime.utcnow()
         self.last_modification_time = datetime.utcnow()
 
-        self.dwx = DWX_Client(self, MT4_directory_path, sleep_delay, 
+        self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
         sleep(1)
 
@@ -123,7 +123,7 @@ class TickProcessor():
 
 MT4_files_dir = 'C:/Users/Administrator/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files/'
 
-processor = TickProcessor(MT4_files_dir)
+processor = tick_processor(MT4_files_dir)
 
 while processor.dwx.ACTIVE:
     sleep(1)
