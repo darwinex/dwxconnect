@@ -58,20 +58,30 @@ For simplicity, we will refer to the non-MQL side of this project as the "Python
 The full list of input parameters for the MetaTrader Server EA (MT4 or MT5) is as follows:
 
 - **MILLISECOND_TIMER** - The interval in which the EA checks for new prices and changes in the open orders (in milliseconds). 
+
 - **numLastMessages** - The number of messages that will be stored in the message file. If it is too small, it could happen that the Python side misses a message. If it is too large, it could lead to higher CPU demand. Messages are mostly used for feedback and debug purposes, so they are not critical. 
+
 - **openChartsForBarData** - If true, it will open charts for symbol/timeframe combinations that are subscribed to bar data. MetaTrader does not automatically update all bar data in the background instantly. By having the charts open, we force MetaTrader to update the data more quickly reducing the delay on a new bar. 
+
 - **openChartsForHistoricData** - Same as the last parameter, but for symbol/timeframe combinations for which a request for historic data was sent. 
+
 - **MaximumOrders** - The maximum number of orders allowed. If the maximum number of orders is open and an order is sent from the Python side, it will not open the order, but return an error message. 
+
 - **MaximumLotSize** - The maximum lot size allowed for a single order (not all orders together). 
+
 - **SlippagePoints** - This value will be used in the OrderSend() function. This is usually ignored by the broker, but still available as a parameter for completeness. 
+
 - **lotSizeDigits** - The digits to which the lot size should be rounded. The default is 2 for Forex symbols. But if you trade Stocks or Indices there could be symbols that do not allow lot sizes as small as 0.01. 
 
 ![MetaTrader Settings](resources/images/DWX_Connect_MetaTrader_Settings.jpg)
 
 **Python side:** 
 - **sleep_delay** - The time interval in which the Python side will check the files (in seconds). The default value is0.005 (5 milliseconds). 
+
 - **max_retry_command_seconds** - If you send multiple commands in a short time, it could happen that the Python side is not able to write to the command file when the mql side is just reading it. The parameter `max_retry_command_seconds` can be used to define the period in which the Python side will retry to send the commend.
+
 - **load_orders_from_file** - If true, it will load the orders from a file on initialization. Otherwise it would trigger the on_order_event() function after a restart of the Python program if there are any open orders because it would not know about them. However, it will only know the last state that was sent to the Python side. If the mql server EA is turned off during order operations, it would only notice them when both are turned on again. 
+
 - **verbose** - If true, it will print more debug information. 
 
 ## Example Usage
@@ -81,9 +91,13 @@ The best way to get started is to use the [example DWX_Connect client](python/ex
 It defines various functions which can be used to react to data changes from MetaTrader:
 
 - **on_tick(symbol, bid, ask)** - is triggered every time the Python side registers a change in the current bid/ask prices. For easier access the symbol and the current bid/ask prices are passed along. However, you can also always access them through self.dwx.market_data from any other function. 
+
 - **on_bar_data(symbol, time_frame, time, open_price, high, low, close_price, tick_volume)** - is triggered when the Python side registers new bar data.
+
 - **on_historic_data(symbol, time_frame, data)** - is triggered when the Python side registers a response from a historic data request. 
+
 - **on_historic_trades()** - is triggered when the Python side registers a response from a historic trades request. The historic trades can be accessed via self.dwx.historic_trades.
+
 - **on_message(message)** - is triggered when the Python side registers a new message from MetaTrader. The message is a dictionary with a 'type' that can either be 'INFO' or 'ERROR'. Error messages have an 'error_type' and a 'description' while info messages only contain a 'message'.
 
 ## Video Tutorials
