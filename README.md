@@ -8,9 +8,9 @@
 
 **Please take a moment to read our Risk Disclosure [here](https://www.darwinex.com/legal/risk-disclaimer?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold)**
 
-**[Click here to visit our Trader Hall of Fame](https://www.darwinex.com/darwinia/hall-of-fame?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold)** * **ranked by Performance Fees earned (over 2M EUR paid to date)**
+**[Click here to visit our Trader Hall of Fame](https://www.darwinex.com/darwinia/hall-of-fame?utm_source=github&utm_medium=dwx-connect-readme&utm_content=about-us-above-the-fold)** * **ranked by Performance Fees earned (over €3 million paid to date)**
 
-**[Click here to Open a Darwinex Trading Account](https://www.darwinex.com/register?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold)**
+**[Click here to Open a Darwinex Trading Account](https://www.darwinex.com/register?utm_source=github&utm_medium=dwx-connect-readme&utm_content=about-us-above-the-fold)**
 
 ## Table of Contents
 * [Introduction](#introduction)
