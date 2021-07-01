@@ -23,9 +23,11 @@
 
 ## Introduction
 
-DWX_Connect provides functions to subscribe to tick and bar data, as well as to trade on MT4 or MT5 via python, java and C#. 
-Its simple file-based communication also provides an easy starting point for implementations in other programming languages. 
-For simplicity, we will refer to the non-mql side of this project as the "Python side" in this readme even though it could also be any other programming language. 
+DWX Connect enables anyone to write trading strategies in any programming language and trade them at Darwinex. It provides functionality to subscribe to Tick and Bar data, as well as to Trade via MetaTrader 4 or 5 without having to code algorithms in MQL.
+
+Its simple, file-based communication mechanism also provides an easy starting point for implementations in other programming languages. 
+
+For simplicity, we will refer to the non-MQL side of this project as the "Python side" in this README.
 
 ## One-off Installation Steps
 
