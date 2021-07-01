@@ -53,7 +53,10 @@ For simplicity, we will refer to the non-MQL side of this project as the "Python
 
 ## Configuration
 
-**MQL side:** For most applications it is only necessary to modify the two input parameters **MaximumOrders** and **MaximumLotSize**. Here is a list of all possible input parameters for the MetaTrader server EA:
+**MQL side:** For most applications it is only necessary to modify the two input parameters **MaximumOrders** and **MaximumLotSize**. 
+
+The full list of input parameters for the MetaTrader Server EA (MT4 or MT5) is as follows:
+
 - **MILLISECOND_TIMER** - The interval in which the EA checks for new prices and changes in the open orders (in milliseconds). 
 - **numLastMessages** - The number of messages that will be stored in the message file. If it is too small, it could happen that the Python side misses a message. If it is too large, it could lead to higher CPU demand. Messages are mostly used for feedback and debug purposes, so they are not critical. 
 - **openChartsForBarData** - If true, it will open charts for symbol/timeframe combinations that are subscribed to bar data. MetaTrader does not automatically update all bar data in the background instantly. By having the charts open, we force MetaTrader to update the data more quickly reducing the delay on a new bar. 
@@ -73,7 +76,10 @@ For simplicity, we will refer to the non-MQL side of this project as the "Python
 
 ## Example Usage
 
-The best way to start is to use the [example DWX_Connect client](python/examples/dwx_client_example.py). It defines various functions which can be used to react to data changes from MetaTrader:
+The best way to get started is to use the [example DWX_Connect client](python/examples/dwx_client_example.py). 
+
+It defines various functions which can be used to react to data changes from MetaTrader:
+
 - **on_tick(symbol, bid, ask)** - is triggered every time the Python side registers a change in the current bid/ask prices. For easier access the symbol and the current bid/ask prices are passed along. However, you can also always access them through self.dwx.market_data from any other function. 
 - **on_bar_data(symbol, time_frame, time, open_price, high, low, close_price, tick_volume)** - is triggered when the Python side registers new bar data.
 - **on_historic_data(symbol, time_frame, data)** - is triggered when the Python side registers a response from a historic data request. 
@@ -89,6 +95,7 @@ Click the image below to watch a live demonstration of DWX Connect:
 ## Available Functions:
 
 **Stored Information:**
+
 The following dictionaries can be used to access the available information directly (e.g. through self.dwx.open_orders):
 - `open_orders` - contains the open orders. The order ticket is used as the key for this dictionary. 
 - `account_info` - contains the account information such as account name, number, equity, balance, leverage and free margin. 
@@ -105,7 +112,13 @@ The following dictionaries can be used to access the available information direc
 - `get_historic_trades(lookback_days)` - requests the trade history for the last x days. Keep in mind that in MetaTrader the complete trade history should be visible in the Account History tab. 
 
 **Order Functions:**
-In MT4 the term 'order' refers to both, pending orders and filled positions. To keep the functionality consistent between Python/MT4/MT5, we also do not differentiate between pending orders and positions on the Python side. Filled positions are just orders with type 'buy' or 'sell'. 
+
+In MT4 the term 'order' refers to both, pending orders and filled positions. 
+
+To keep the functionality consistent between Python/MT4/MT5, we also do not differentiate between pending orders and positions on the Python side. 
+
+Filled positions are just orders with type 'buy' or 'sell'. 
+
 - `open_order(symbol, order_type, lots, price, stop_loss, take_profit, magic, comment, expriation)` - sends a request to open an order. 
    - Order types: 'buy', 'sell', 'buylimit', 'selllimit', 'buystop', 'sellstop'
    - If the price is empty, it will use the current bid/ask price (only works for market buy/sell orders). 
