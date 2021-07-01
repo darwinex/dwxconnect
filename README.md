@@ -1,14 +1,10 @@
-# DWX_Connect - a simple multi-language MT4 connector
+# DWX Connect - Seamlessly Link Any Trading Strategy to Darwinex
 
 ## Need help? Join the [Darwinex Collective Slack](https://join.slack.com/t/darwinex-collective/shared_invite/enQtNjg4MjA0ODUzODkyLWFiZWZlMDZjNGVmOGE2ZDBiZGI4ZWUxNjM5YTU0MjZkMTQ2NGZjNGIyN2QxZDY4NjUyZmVlNmU3N2E2NGE1Mjk) for code updates, Q&A and more.
 
 ## About Darwinex
 
-[Darwinex](https://www.darwinex.com/?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold) is a **UK FCA-Regulated broker & technology provider**, enabling traders to:
-
-1. Trade the markets on the best terms and competitive execution conditions 
-1. Develop their trading skills and build verifiable, investable track records
-1. Provide regulatory cover to attract capital and charge a 20% performance fee on investor profits
+[Darwinex](https://www.darwinex.com/?utm_source=github&utm_medium=dwx-connect-readme&utm_content=about-us-above-the-fold) is a **UK FCA-Regulated FinTech, Broker & Asset Manager**. We provide cost-effective market access via multiple trading platforms and APIs, and empower talented traders with the fastest route to attract investor capital and charge performance fees.
 
 **Please take a moment to read our Risk Disclosure [here](https://www.darwinex.com/legal/risk-disclaimer?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold)**
 
