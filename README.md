@@ -27,19 +27,13 @@ DWX_Connect provides functions to subscribe to tick and bar data, as well as to 
 Its simple file-based communication also provides an easy starting point for implementations in other programming languages. 
 For simplicity, we will refer to the non-mql side of this project as the "Python side" in this readme even though it could also be any other programming language. 
 
-## Installation
+## One-off Installation Steps
 
-1. If you are using python, you can just install the package via pip:
+1. Please download the code from this GitHub repository. 
 
-    ```console
-    pip install dwxconnect
-    ```
+1. Download the MT4/MT5 Server EA (dwx_server_mt4.mq4 or dwx_server_mt5.mq5, depending on whether you're using MT4 or MT5) and copy it into the /MQL4/Experts or /MQL5/Experts directory (File -> Open Data Folder). 
 
-    For java or C#, please download the code from the GitHub repository. 
-
-1. Download the MT4/MT5 server EA (dwx_server_mt4.mq4 or dwx_server_mt5.mq5) and copy it into the /MQL4/Experts or /MQL5/Experts directory (File -> Open Data Folder). 
-
-1. Double click on the MT4/MT5 EA file to open it in MetaEditor. Press F7 to compile the file. Restart MT4/MT5 or rightclick -> Refresh in the Navigator window. 
+1. Double click on the MT4/MT5 EA file to open it in MetaEditor. Press F7 to compile the file. Restart MT4/MT5 or Right-Click -> Refresh in the Navigator window. 
 
 1. Attach the EA to any chart. Change the input parameters if needed, for example, MaximumOrders and MaximumLotSize if you want to trade larger sizes.
 
@@ -67,7 +61,7 @@ For simplicity, we will refer to the non-mql side of this project as the "Python
 - **SlippagePoints** - This value will be used in the OrderSend() function. This is usually ignored by the broker, but still available as a parameter for completeness. 
 - **lotSizeDigits** - The digits to which the lot size should be rounded. The default is 2 for Forex symbols. But if you trade Stocks or Indices there could be symbols that do not allow lot sizes as small as 0.01. 
 
-![MetaTrader settings](resources/images/DWX_Connect_MetaTrader_Settings.jpg)
+![MetaTrader Settings](resources/images/DWX_Connect_MetaTrader_Settings.jpg)
 
 **Python side:** 
 - **sleep_delay** - The time interval in which the Python side will check the files (in seconds). The default value is0.005 (5 milliseconds). 
@@ -90,9 +84,9 @@ Click the image below to watch a live demonstration of DWX Connect:
 
 [![DWX Connect: Seamlessly Link Any Trading Strategy to Darwinex](https://img.youtube.com/vi/rbApdnEyJxw/0.jpg)](https://www.youtube.com/watch?v=rbApdnEyJxw "DWX Connect: Seamlessly Link Any Trading Strategy to Darwinex")
 
-## Available functions:
+## Available Functions:
 
-**Stored information:**
+**Stored Information:**
 The following dictionaries can be used to access the available information directly (e.g. through self.dwx.open_orders):
 - `open_orders` - contains the open orders. The order ticket is used as the key for this dictionary. 
 - `account_info` - contains the account information such as account name, number, equity, balance, leverage and free margin. 
@@ -101,14 +95,14 @@ The following dictionaries can be used to access the available information direc
 - `historic_data` - contains the latest historic data, which is only updated after a request for historic data.
 - `historic_trades` - contains the requested trade history, which is only updated after a request for historic trades. 
 
-**Data functions:**
+**Data Functions:**
 - `subscribe_symbols(symbols)` - subscribes to tick data for a list of symbols. Example format: `symbols = ['EURUSD', 'GBPUSD']`
 - `subscribe_symbols_bar_data(symbols)` - subscribes to bar data for a list of symbol/timeframe combinations. Example format: `symbols=[['EURUSD', 'M15'], ['GBPUSD', 'H4']]`
 - `subscribe_symbols(symbols)` - subscribes to tick data for a list of symbols. Example format: `symbols = ['EURUSD', 'GBPUSD']`
 - `get_historic_data(symbol, time_frame, start, end)` - requests historic bar data. The arguments `start` and `end` are given as timestamp. 
 - `get_historic_trades(lookback_days)` - requests the trade history for the last x days. Keep in mind that in MetaTrader the complete trade history should be visible in the Account History tab. 
 
-**Order functions:**
+**Order Functions:**
 In MT4 the term 'order' refers to both, pending orders and filled positions. To keep the functionality consistent between Python/MT4/MT5, we also do not differentiate between pending orders and positions on the Python side. Filled positions are just orders with type 'buy' or 'sell'. 
 - `open_order(symbol, order_type, lots, price, stop_loss, take_profit, magic, comment, expriation)` - sends a request to open an order. 
    - Order types: 'buy', 'sell', 'buylimit', 'selllimit', 'buystop', 'sellstop'
