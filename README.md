@@ -86,7 +86,6 @@ The best way to start is to use the [example DWX_Connect client](python/examples
 
 ## Video Tutorials
 
-Click the image below for a demonstration of DWX Connect:
 [![DWX Connect: Seamlessly Link Any Trading Strategy to Darwinex](https://img.youtube.com/vi/rbApdnEyJxw/0.jpg)](https://www.youtube.com/watch?v=rbApdnEyJxw "DWX Connect: Seamlessly Link Any Trading Strategy to Darwinex")
 
 ## Available functions:
