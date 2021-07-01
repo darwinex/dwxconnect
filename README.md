@@ -4,7 +4,7 @@
 
 ## About Darwinex
 
-[Darwinex](https://www.darwinex.com/?utm_source=github&utm_medium=dwx-connect-readme&utm_content=about-us-above-the-fold) is a **UK FCA-Regulated FinTech, Broker & Asset Manager**. We provide cost-effective market access via multiple trading platforms and APIs, and empower talented traders with the fastest route to attract investor capital and charge performance fees.
+[Darwinex](https://www.darwinex.com/?utm_source=github&utm_medium=dwx-connect-readme&utm_content=about-us-above-the-fold) is a **UK FCA-Regulated FinTech, Broker & Asset Manager**. We provide cost-effective access to Stocks, Futures, FX and CFDs via Trader Workstation (TWS), TWS API, FIX API, MetaTrader 4 and 5, and empower talented traders with the fastest route to attract investor capital and charge performance fees.
 
 **Please take a moment to read our Risk Disclosure [here](https://www.darwinex.com/legal/risk-disclaimer?utm_source=github&utm_medium=zeromq-readme&utm_content=about-us-above-the-fold)**
 
