@@ -41,7 +41,12 @@ For simplicity, we will refer to the non-MQL side of this project as the "Python
 
 1. Copy the [dwx_client_example.py](python/examples/dwx_client_example.py) file from the examples folder to your working directory.
 
-1. Open the file and change the `MT4_files_dir` variable to the full path of the /MQL4/Files or /MQL5/Files directory. 
+1. Open the file and change the `MT4_files_dir` variable to the full path of the /MQL4/Files or /MQL5/Files directory. On Windows the path usually looks similar to this (<username> is your username):<br/>
+  `MT4_files_dir = 'C:/Users/<username>/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files'`<br/>
+  However, on macOS it could look like this:<br/>
+  `MT4_files_dir = '/Users/<username>/Library/Application Support/MetaTrader 4/Bottles/metatrader4/drive_c/Program Files/MetaTrader 4/MQL4/Files'`<br/>
+  And on Linux like this:<br/>
+  `MT4_files_dir = '/home/<username>/.wine/drive_c/Program Files (x86)/Darwinex MT4/MQL4/Files'`
 
 1. The example script will just try to subscribe to EURUSD and GBPUSD, and print some information on every tick. You can run the script with:
     ```console
