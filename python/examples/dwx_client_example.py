@@ -28,7 +28,7 @@ class tick_processor():
                  verbose=True
                  ):
 
-        # if true, it will randomly tryp to open and close orders every few seconds. 
+        # if true, it will randomly try to open and close orders every few seconds. 
         self.open_test_trades = False
 
         self.last_open_time = datetime.utcnow()
