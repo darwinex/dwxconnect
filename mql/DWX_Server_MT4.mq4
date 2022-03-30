@@ -270,7 +270,7 @@ void OpenOrder(string orderStr) {
    }
    
    if (lots < MarketInfo(symbol, MODE_MINLOT) || lots > MarketInfo(symbol, MODE_MAXLOT)) {
-      SendError("OPEN_ORDER_LOTSIZE_OUT_OF_RANGE", StringFormat("Lot size out of range (min: %f, max: %s): %f", MarketInfo(symbol, MODE_MINLOT), MarketInfo(symbol, MODE_MAXLOT), lots));
+      SendError("OPEN_ORDER_LOTSIZE_OUT_OF_RANGE", StringFormat("Lot size out of range (min: %f, max: %f): %f", MarketInfo(symbol, MODE_MINLOT), MarketInfo(symbol, MODE_MAXLOT), lots));
       return;
    }
    
@@ -321,7 +321,7 @@ void ModifyOrder(string orderStr) {
    if (price == 0) price = OrderOpenPrice();
    
    if (lots < MarketInfo(OrderSymbol(), MODE_MINLOT) || lots > MarketInfo(OrderSymbol(), MODE_MAXLOT)) {
-      SendError("MODIFY_ORDER_LOTSIZE_OUT_OF_RANGE", StringFormat("Lot size out of range (min: %f, max: %s): %f", MarketInfo(OrderSymbol(), MODE_MINLOT), MarketInfo(OrderSymbol(), MODE_MAXLOT), lots));
+      SendError("MODIFY_ORDER_LOTSIZE_OUT_OF_RANGE", StringFormat("Lot size out of range (min: %f, max: %f): %f", MarketInfo(OrderSymbol(), MODE_MINLOT), MarketInfo(OrderSymbol(), MODE_MAXLOT), lots));
       return;
    }
    
