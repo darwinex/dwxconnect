@@ -39,6 +39,8 @@ For simplicity, we will refer to the non-MQL side of this project as the "Python
 
 1. Attach the EA to any chart. Change the input parameters if needed, for example, MaximumOrders and MaximumLotSize if you want to trade larger sizes.
 
+1. Copy the [python folder](python/) to your working directory.
+
 1. Open the file [dwx_client_example.py](python/dwx_client_example.py) and change the `MT4_files_dir` variable to the full path of the /MQL4/Files or /MQL5/Files directory. On Windows the path usually looks similar to this (`<username>` is your username):<br/>
   `C:/Users/<username>/AppData/Roaming/MetaQuotes/Terminal/3B534B10135CFEDF8CD1AAB8BD994B13/MQL4/Files`<br/><br/>
   However, on macOS it could look like this:<br/>
