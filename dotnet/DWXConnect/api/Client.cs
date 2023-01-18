@@ -743,7 +743,7 @@ namespace DWXConnect
 		*/
         void sendCommand(string command, string content)
         {
-            // Needs lock so that different threads do not use the same 
+            // Need lock so that different threads do not use the same 
             // commandID or write at the same time.
             lock (this) {
                 commandID = (commandID + 1) % 100000;
