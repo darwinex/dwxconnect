@@ -43,6 +43,7 @@ public class Client {
     private String pathCommandsPrefix;
     
     private int maxCommandFiles = 20;
+    private int commandID = 0;
     private long lastMessagesMillis = 0;
     private String lastOpenOrdersStr = "";
     private String lastMessagesStr = "";
@@ -128,6 +129,8 @@ public class Client {
 		
 		this.historicDataThread = new Thread(() -> checkHistoricData());
         this.historicDataThread.start();
+
+        resetCommandIDs();
         
         // no need to wait. 
         if (eventHandler == null) {
@@ -662,33 +665,59 @@ public class Client {
         
         sendCommand("CLOSE_ORDERS_BY_MAGIC", Integer.toString(magic));
     }
+
+
+    /*Sends a RESET_COMMAND_IDS command to reset stored command IDs. 
+    This should be used when restarting the java side without restarting 
+    the mql side.
+	*/
+    public void resetCommandIDs() {
+        
+        commandID = 0;
+
+        sendCommand("RESET_COMMAND_IDS", "");
+
+        // sleep to make sure it is read before other commands.
+        sleep(500);
+    }
 	
-    
+
 	/*Sends a command to the mql server by writing it to 
     one of the command files. 
 
     Multiple command files are used to allow for fast execution 
     of multiple commands in the correct chronological order. 
+    
+    The method needs to be synchronized so that different threads 
+    do not use the same commandID or write at the same time.
 	*/
-    void sendCommand(String command, String content) {
+    synchronized void sendCommand(String command, String content) {
         
-        String text = "<:" + command + "|" + content + ":>";
+        commandID = (commandID + 1) % 100000;
+        
+        String text = "<:" + commandID + "|" + command + "|" + content + ":>";
         
         long now = System.currentTimeMillis();
         long endMillis = now + maxRetryCommandSeconds * 1000;
         
-        // trying again for X seconds in case all files exist or are currently read from mql side. 
+        // trying again for X seconds in case all files exist or are 
+        // currently read from mql side. 
         while (now < endMillis) {
             
-            // using 10 different files to increase the execution speed for muliple commands. 
+            // using 10 different files to increase the execution speed 
+            // for muliple commands. 
+            boolean success = false;
             for (int i=0; i<maxCommandFiles; i++) {
                 
                 String filePath = pathCommandsPrefix + i + ".txt";
 				File f = new File(filePath);
                 if (!f.exists() && tryWriteToFile(filePath, text)) {
-                    return;
-				}
+                    success = true;
+                    break;
+                }
             }
+            if (success) break;
+            sleep(sleepDelay);
             now = System.currentTimeMillis();
         }
     }

@@ -86,6 +86,7 @@ class MyEventHandler implements EventHandler {
 		// to open an order:
 		// if (first) {
 			// first = false;
+			// // dwx.closeAllOrders();
 			// for (int i=0; i<5; i++) {
 				// dwx.openOrder(symbol, "buystop", 0.05, ask+0.01, 0, 0, 77, "", 0);
 			// }

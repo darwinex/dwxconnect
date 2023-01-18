@@ -60,6 +60,9 @@ MESSAGE lastMessages[];
 
 string MarketDataSymbols[];
 
+int commandIDindex = 0;
+int commandIDs[];
+
 /**
  * Class definition for an specific instrument: the tuple (symbol,timeframe)
  */
@@ -129,10 +132,9 @@ int OnInit() {
       Print("EventSetMillisecondTimer() returned an error: ", ErrorDescription(GetLastError()));
       return INIT_FAILED;
    }
-   
    ResetFolder();
+   ResetCommandIDs();
    ArrayResize(lastMessages, numLastMessages);
-   
    return INIT_SUCCEEDED;
 }
 //+------------------------------------------------------------------+
@@ -200,40 +202,54 @@ void CheckCommands() {
       string data[];
       int splits = StringSplit(text, uSep, data);
       
-      if (splits != 2) {
+      if (splits != 3) {
          SendError("WRONG_FORMAT_COMMAND", "Wrong format for command: " + text);
          return;
       }
       
-      string command = data[0];
+      int commandID = (int)data[0];
+      string command = data[1];
+      string dataStr = data[2];
+      
+      // dont check commandID for the reset command because else it could get blocked if only the python/java/dotnet side restarts, but not the mql side.
+      if (command != "RESET_COMMAND_IDS" && CommandIDfound(commandID)) {
+         Print(StringFormat("Not executing command because ID already exists. commandID: %d, command: %s, dataStr: %s ", commandID, command, dataStr));
+         return;
+      }
+      commandIDs[commandIDindex] = commandID;
+      commandIDindex = (commandIDindex + 1) % ArraySize(commandIDs);
       
       if (command == "OPEN_ORDER") {
-         OpenOrder(data[1]);
+         OpenOrder(dataStr);
       } else if (command == "CLOSE_ORDER") {
-         CloseOrder(data[1]);
+         CloseOrder(dataStr);
       } else if (command == "CLOSE_ALL_ORDERS") {
          CloseAllOrders();
       } else if (command == "CLOSE_ORDERS_BY_SYMBOL") {
-         CloseOrdersBySymbol(data[1]);
+         CloseOrdersBySymbol(dataStr);
       } else if (command == "CLOSE_ORDERS_BY_MAGIC") {
-         CloseOrdersByMagic(data[1]);
+         CloseOrdersByMagic(dataStr);
       } else if (command == "MODIFY_ORDER") {
-         ModifyOrder(data[1]);
+         ModifyOrder(dataStr);
       } else if (command == "SUBSCRIBE_SYMBOLS") {
-         SubscribeSymbols(data[1]);
+         SubscribeSymbols(dataStr);
       } else if (command == "SUBSCRIBE_SYMBOLS_BAR_DATA") {
-         SubscribeSymbolsBarData(data[1]);
+         SubscribeSymbolsBarData(dataStr);
       } else if (command == "GET_HISTORIC_TRADES") {
-         GetHistoricTrades(data[1]);
+         GetHistoricTrades(dataStr);
       } else if (command == "GET_HISTORIC_DATA") {
-         GetHistoricData(data[1]);
+         GetHistoricData(dataStr);
+      } else if (command == "RESET_COMMAND_IDS") {
+         Print("Resetting stored command IDs.");
+         ResetCommandIDs();
+         return;
       }
    }
 }
 
 
 void OpenOrder(string orderStr) {
-   
+   Print("OpenOrder: ", orderStr);
    string sep = ",";
    ushort uSep = StringGetCharacter(sep, 0);
    string data[];
@@ -939,6 +955,16 @@ bool OpenChartIfNotOpen(string symbol, ENUM_TIMEFRAMES timeFrame) {
    }
 }
 
+void ResetCommandIDs() {
+   ArrayResize(commandIDs, 1000);  // save the last 1000 command IDs.
+   ArrayFill(commandIDs, 0, ArraySize(commandIDs), -1);  // fill with -1 so that 0 will not be blocked.
+   commandIDindex = 0;
+}
+
+bool CommandIDfound(int id) {
+   for (int i=0; i<ArraySize(commandIDs); i++) if (id == commandIDs[i]) return true;
+   return false;
+}
 
 // use string so that we can have the same in MT5. 
 string OrderTypeToString(int orderType) {

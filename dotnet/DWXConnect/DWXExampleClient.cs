@@ -45,6 +45,8 @@ namespace DWXConnect
 	*/
     class MyEventHandler : EventHandler
     {
+        bool first = true;
+
         public void start(Client dwx)
         {
 			// account information is stored in dwx.accountInfo.
@@ -71,6 +73,15 @@ namespace DWXConnect
 			
 			// print(dwx.accountInfo);
 			// print(dwx.openOrders);
+            
+            // to open a few orders:
+			// if (first) {
+			// 	first = false;
+            // // dwx.closeAllOrders();
+			// 	for (int i=0; i<5; i++) {
+			// 		dwx.openOrder(symbol, "buystop", 0.05, ask+0.01, 0, 0, 77, "", 0);
+			// 	}
+			// }
         }
 
         public void onBarData(Client dwx, string symbol, string timeFrame, string time, double open, double high, double low, double close, int tickVolume)

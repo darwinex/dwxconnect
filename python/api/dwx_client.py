@@ -2,7 +2,7 @@
 import os
 import json
 from time import sleep
-from threading import Thread
+from threading import Thread, Lock
 from os.path import join, exists
 from traceback import print_exc
 from datetime import datetime, timedelta
@@ -31,6 +31,7 @@ class dwx_client():
         self.max_retry_command_seconds = max_retry_command_seconds
         self.load_orders_from_file = load_orders_from_file
         self.verbose = verbose
+        self.command_id = 0
 
         if not exists(metatrader_dir_path):
             print('ERROR: metatrader_dir_path does not exist!')
@@ -78,6 +79,8 @@ class dwx_client():
         self.ACTIVE = True
         self.START = False
 
+        self.lock = Lock()
+
         self.load_messages()
 
         if self.load_orders_from_file:
@@ -105,6 +108,8 @@ class dwx_client():
             target=self.check_historic_data, args=())
         self.historic_data_thread.daemon = True
         self.historic_data_thread.start()
+
+        self.reset_command_ids()
 
         # no need to wait.
         if self.event_handler is None:
@@ -563,6 +568,21 @@ class dwx_client():
 
         self.send_command('CLOSE_ORDERS_BY_MAGIC', magic)
 
+    """Sends a RESET_COMMAND_IDS command to reset stored command IDs. 
+    This should be used when restarting the python side without restarting 
+    the mql side.
+
+    """
+
+    def reset_command_ids(self):
+
+        self.command_id = 0
+
+        self.send_command("RESET_COMMAND_IDS", "")
+
+        # sleep to make sure it is read before other commands.
+        sleep(0.5)
+
     """Sends a command to the mql server by writing it to 
     one of the command files. 
 
@@ -573,21 +593,37 @@ class dwx_client():
 
     def send_command(self, command, content):
 
+        # Acquire lock so that different threads do not use the same 
+        # command_id or write at the same time.
+        self.lock.acquire()
+
+        self.command_id = (self.command_id + 1) % 100000
+
         end_time = datetime.utcnow() + timedelta(seconds=self.max_retry_command_seconds)
         now = datetime.utcnow()
 
-        # trying again for X seconds in case all files exist or are currently read from mql side.
+        # trying again for X seconds in case all files exist or are 
+        # currently read from mql side.
         while now < end_time:
-            # using 10 different files to increase the execution speed for muliple commands.
+            # using 10 different files to increase the execution speed 
+            # for muliple commands.
+            success = False
             for i in range(self.num_command_files):
-                # only send commend if the file does not exists so that we do not overwrite all commands.
+                # only send commend if the file does not exists so that we 
+                # do not overwrite all commands.
                 file_path = f'{self.path_commands_prefix}{i}.txt'
                 if not exists(file_path):
                     try:
                         with open(file_path, 'w') as f:
-                            f.write(f'<:{command}|{content}:>')
-                            return
+                            f.write(f'<:{self.command_id}|{command}|{content}:>')
+                        success = True
+                        break
                     except:
                         print_exc()
+            if success:
+                break
             sleep(self.sleep_delay)
             now = datetime.utcnow()
+        
+        # release lock again
+        self.lock.release()

@@ -16,7 +16,13 @@ Example dwxconnect client in python
 
 
 This example client will subscribe to tick data and bar data. It will also request historic data. 
-if open_test_trades=True, it will also open trades. Please only run this on a demo account. 
+
+!!! ----- IMPORTANT ----- !!!
+
+If open_test_trades=True, it will open many trades. 
+Please only run this on a demo account!
+
+!!! ----- IMPORTANT ----- !!!
 
 """
 
@@ -62,7 +68,7 @@ class tick_processor():
         print('on_tick:', now, symbol, bid, ask)
 
         # to test trading. 
-        # this will randomly tryp to open and close orders every few seconds. 
+        # this will randomly try to open and close orders every few seconds. 
         if self.open_test_trades:
             if now > self.last_open_time + timedelta(seconds=3):
 

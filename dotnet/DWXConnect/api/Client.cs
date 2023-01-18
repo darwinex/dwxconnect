@@ -35,6 +35,7 @@ namespace DWXConnect
         private string pathCommandsPrefix;
 
         private int maxCommandFiles = 20;
+        private int commandID = 0;
         private long lastMessagesMillis = 0;
         private string lastOpenOrdersStr = "";
         private string lastMessagesStr = "";
@@ -106,6 +107,8 @@ namespace DWXConnect
 
             this.historicDataThread = new Thread(() => checkHistoricData());
             this.historicDataThread.Start();
+
+            resetCommandIDs();
 
             // no need to wait. 
             if (eventHandler == null)
@@ -717,6 +720,21 @@ namespace DWXConnect
             sendCommand("CLOSE_ORDERS_BY_MAGIC", magic.ToString());
         }
 
+        /*Sends a RESET_COMMAND_IDS command to reset stored command IDs. 
+        This should be used when restarting the java side without restarting 
+        the mql side.
+        */
+        public void resetCommandIDs() 
+        {
+            commandID = 0;
+            
+            sendCommand("RESET_COMMAND_IDS", "");
+
+            // sleep to make sure it is read before other commands.
+            Thread.Sleep(500);
+        }
+
+
 		/*Sends a command to the mql server by writing it to 
 		one of the command files. 
 
@@ -725,23 +743,36 @@ namespace DWXConnect
 		*/
         void sendCommand(string command, string content)
         {
+            // Needs lock so that different threads do not use the same 
+            // commandID or write at the same time.
+            lock (this) {
+                commandID = (commandID + 1) % 100000;
 
-            string text = "<:" + command + "|" + content + ":>";
+                string text = "<:" + commandID + "|" + command + "|" + content + ":>";
 
-            DateTime now = DateTime.UtcNow;
-            DateTime endTime = DateTime.UtcNow + new TimeSpan(0, 0, maxRetryCommandSeconds);
+                DateTime now = DateTime.UtcNow;
+                DateTime endTime = DateTime.UtcNow + new TimeSpan(0, 0, maxRetryCommandSeconds);
 
-            // trying again for X seconds in case all files exist or are currently read from mql side. 
-            while (now < endTime)
-            {
-                // using 10 different files to increase the execution speed for muliple commands. 
-                for (int i = 0; i < maxCommandFiles; i++)
+                // trying again for X seconds in case all files exist or are 
+                // currently read from mql side. 
+                while (now < endTime)
                 {
-                    string filePath = pathCommandsPrefix + i + ".txt";
-                    if (!File.Exists(filePath) && tryWriteToFile(filePath, text))
-                        return;
+                    // using 10 different files to increase the execution speed 
+                    // for muliple commands. 
+                    bool success = false;
+                    for (int i = 0; i < maxCommandFiles; i++)
+                    {
+                        string filePath = pathCommandsPrefix + i + ".txt";
+                        if (!File.Exists(filePath) && tryWriteToFile(filePath, text)) 
+                        {
+                            success = true;
+                            break;
+                        }
+                    }
+                    if (success) break;
+                    Thread.Sleep(sleepDelay);
+                    now = DateTime.UtcNow;
                 }
-                now = DateTime.UtcNow;
             }
         }
     }
