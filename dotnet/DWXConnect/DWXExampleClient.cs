@@ -74,7 +74,7 @@ namespace DWXConnect
 			// print(dwx.accountInfo);
 			// print(dwx.openOrders);
             
-            // to open a few orders:
+            // to open multiple orders:
 			// if (first) {
 			// 	first = false;
             // // dwx.closeAllOrders();

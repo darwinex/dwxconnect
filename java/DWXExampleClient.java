@@ -83,7 +83,7 @@ class MyEventHandler implements EventHandler {
 		print("onTick: " + symbol + " | bid: " + bid + " | ask: " + ask);
         // print(symbol + " ticks: " + app.history.get(symbol).history.size());
 		
-		// to open an order:
+		// to open multiple orders:
 		// if (first) {
 			// first = false;
 			// // dwx.closeAllOrders();
