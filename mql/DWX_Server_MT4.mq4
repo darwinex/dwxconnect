@@ -177,13 +177,14 @@ void CheckCommands() {
       string filePath = filePathCommandsPrefix + IntegerToString(i) + ".txt";
       if (!FileIsExist(filePath)) return;
       int handle = FileOpen(filePath, FILE_READ|FILE_TXT);  // FILE_COMMON | 
+      // Print(filePath, " | handle: ", handle);
       if (handle == -1) return;
       if (handle == 0) return;
       
       string text = "";
       while(!FileIsEnding(handle)) text += FileReadString(handle);
       FileClose(handle);
-      FileDelete(filePath);
+      for (int j=0; j<10; j++) if (FileDelete(filePath)) break;
       
       // make sure that the file content is complete. 
       int length = StringLen(text);
@@ -209,47 +210,47 @@ void CheckCommands() {
       
       int commandID = (int)data[0];
       string command = data[1];
-      string dataStr = data[2];
+      string content = data[2];
+      // Print(StringFormat("commandID: %d, command: %s, content: %s ", commandID, command, content));
       
       // dont check commandID for the reset command because else it could get blocked if only the python/java/dotnet side restarts, but not the mql side.
       if (command != "RESET_COMMAND_IDS" && CommandIDfound(commandID)) {
-         Print(StringFormat("Not executing command because ID already exists. commandID: %d, command: %s, dataStr: %s ", commandID, command, dataStr));
+         Print(StringFormat("Not executing command because ID already exists. commandID: %d, command: %s, content: %s ", commandID, command, content));
          return;
       }
       commandIDs[commandIDindex] = commandID;
       commandIDindex = (commandIDindex + 1) % ArraySize(commandIDs);
       
       if (command == "OPEN_ORDER") {
-         OpenOrder(dataStr);
+         OpenOrder(content);
       } else if (command == "CLOSE_ORDER") {
-         CloseOrder(dataStr);
+         CloseOrder(content);
       } else if (command == "CLOSE_ALL_ORDERS") {
          CloseAllOrders();
       } else if (command == "CLOSE_ORDERS_BY_SYMBOL") {
-         CloseOrdersBySymbol(dataStr);
+         CloseOrdersBySymbol(content);
       } else if (command == "CLOSE_ORDERS_BY_MAGIC") {
-         CloseOrdersByMagic(dataStr);
+         CloseOrdersByMagic(content);
       } else if (command == "MODIFY_ORDER") {
-         ModifyOrder(dataStr);
+         ModifyOrder(content);
       } else if (command == "SUBSCRIBE_SYMBOLS") {
-         SubscribeSymbols(dataStr);
+         SubscribeSymbols(content);
       } else if (command == "SUBSCRIBE_SYMBOLS_BAR_DATA") {
-         SubscribeSymbolsBarData(dataStr);
+         SubscribeSymbolsBarData(content);
       } else if (command == "GET_HISTORIC_TRADES") {
-         GetHistoricTrades(dataStr);
+         GetHistoricTrades(content);
       } else if (command == "GET_HISTORIC_DATA") {
-         GetHistoricData(dataStr);
+         GetHistoricData(content);
       } else if (command == "RESET_COMMAND_IDS") {
          Print("Resetting stored command IDs.");
          ResetCommandIDs();
-         return;
       }
    }
 }
 
 
 void OpenOrder(string orderStr) {
-   Print("OpenOrder: ", orderStr);
+   
    string sep = ",";
    ushort uSep = StringGetCharacter(sep, 0);
    string data[];
