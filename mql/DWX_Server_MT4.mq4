@@ -315,7 +315,7 @@ void ModifyOrder(string orderStr) {
    string data[];
    int splits = StringSplit(orderStr, uSep, data);
    
-   if (ArraySize(data) != 6) {
+   if (ArraySize(data) != 5) {
       SendError("MODIFY_ORDER_WRONG_FORMAT", "Wrong format for MODIFY_ORDER command: " + orderStr);
       return;
    }
@@ -329,22 +329,16 @@ void ModifyOrder(string orderStr) {
    
    int digits = (int)MarketInfo(OrderSymbol(), MODE_DIGITS);
    
-   double lots = NormalizeDouble(StringToDouble(data[1]), lotSizeDigits);
-   double price = NormalizeDouble(StringToDouble(data[2]), digits);
-   double stopLoss = NormalizeDouble(StringToDouble(data[3]), digits);
-   double takeProfit = NormalizeDouble(StringToDouble(data[4]), digits);
-   datetime expiration = (datetime)StringToInteger(data[5]);
+   double price = NormalizeDouble(StringToDouble(data[1]), digits);
+   double stopLoss = NormalizeDouble(StringToDouble(data[2]), digits);
+   double takeProfit = NormalizeDouble(StringToDouble(data[3]), digits);
+   datetime expiration = (datetime)StringToInteger(data[4]);
    
    if (price == 0) price = OrderOpenPrice();
    
-   if (lots < MarketInfo(OrderSymbol(), MODE_MINLOT) || lots > MarketInfo(OrderSymbol(), MODE_MAXLOT)) {
-      SendError("MODIFY_ORDER_LOTSIZE_OUT_OF_RANGE", StringFormat("Lot size out of range (min: %f, max: %f): %f", MarketInfo(OrderSymbol(), MODE_MINLOT), MarketInfo(OrderSymbol(), MODE_MAXLOT), lots));
-      return;
-   }
-   
    bool res = OrderModify(ticket, price, stopLoss, takeProfit, expiration);
    if (res) {
-      SendInfo(StringFormat("Successfully modified order %d: %s, %s, %.2f, %.5f, %.5f, %.5f", ticket, OrderSymbol(), OrderTypeToString(OrderType()), lots, price, stopLoss, takeProfit));
+      SendInfo(StringFormat("Successfully modified order %d: %s, %s, %.5f, %.5f, %.5f", ticket, OrderSymbol(), OrderTypeToString(OrderType()), price, stopLoss, takeProfit));
    } else {
       SendError("MODIFY_ORDER", StringFormat("Error in modifying order %d: %s", ticket, ErrorDescription(GetLastError())));
    }

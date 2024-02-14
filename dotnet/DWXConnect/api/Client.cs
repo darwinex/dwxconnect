@@ -655,7 +655,6 @@ namespace DWXConnect
 
 		Args:
 			ticket (int): Ticket of the order that should be modified.
-			lots (double): Volume in lots
 			price (double): Price of the (pending) order. Non-zero only 
 				works for pending orders. 
 			stop_loss (double): New stop loss price.
@@ -663,9 +662,9 @@ namespace DWXConnect
 			expriation (long): New expiration time given as timestamp in seconds. 
 				Can be zero if the order should not have an expiration time. 
 		*/
-        public void modifyOrder(int ticket, double lots, double price, double stopLoss, double takeProfit, long expiration)
+        public void modifyOrder(int ticket, double price, double stopLoss, double takeProfit, long expiration)
         {
-            string content = ticket + "," + format(lots) + "," + format(price) + "," + format(stopLoss) + "," + format(takeProfit) + "," + expiration;
+            string content = ticket + "," + format(price) + "," + format(stopLoss) + "," + format(takeProfit) + "," + expiration;
             sendCommand("MODIFY_ORDER", content);
         }
 		

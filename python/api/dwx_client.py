@@ -499,7 +499,6 @@ class dwx_client():
         ticket (int): Ticket of the order that should be modified.
     
     Kwargs:
-        lots (float): Volume in lots
         price (float): Price of the (pending) order. Non-zero only 
             works for pending orders. 
         stop_loss (float): New stop loss price.
@@ -510,13 +509,12 @@ class dwx_client():
     """
 
     def modify_order(self, ticket,
-                     lots=0.01,
                      price=0,
                      stop_loss=0,
                      take_profit=0,
                      expiration=0):
 
-        data = [ticket, lots, price, stop_loss, take_profit, expiration]
+        data = [ticket, price, stop_loss, take_profit, expiration]
         self.send_command('MODIFY_ORDER', ','.join(str(p) for p in data))
 
     """Sends a CLOSE_ORDER command to close an order.

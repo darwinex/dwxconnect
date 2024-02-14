@@ -596,7 +596,6 @@ public class Client {
 
     Args:
         ticket (int): Ticket of the order that should be modified.
-        lots (double): Volume in lots
         price (double): Price of the (pending) order. Non-zero only 
             works for pending orders. 
         stop_loss (double): New stop loss price.
@@ -604,9 +603,9 @@ public class Client {
         expriation (long): New expiration time given as timestamp in seconds. 
             Can be zero if the order should not have an expiration time. 
 	*/
-    public void modifyOrder(int ticket, double lots, double price, double stopLoss, double takeProfit, long expiration) {
+    public void modifyOrder(int ticket, double price, double stopLoss, double takeProfit, long expiration) {
         
-        String content = ticket + "," + lots + "," + price + "," + stopLoss + "," + takeProfit + "," + expiration;
+        String content = ticket + "," + price + "," + stopLoss + "," + takeProfit + "," + expiration;
         sendCommand("MODIFY_ORDER", content);
     }
 	
