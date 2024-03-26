@@ -65,27 +65,47 @@ namespace DWXConnect
         }
 		
 		
-		/*Formats a double value to string. 
-		
-		Args:
-			value (double): numeric value to format.
-		
-		*/
-		public static string format(double value)
+	/*Formats a double value to string. 
+	
+	Args:
+		value (double): numeric value to format.
+	
+	*/
+	public static string format(double value)
         {
             return value.ToString("G", CultureInfo.CreateSpecificCulture("en-US"));
         }
 
-        public static string tryReadFile(string path)
-        {
-            try
-            {
-                return File.ReadAllText(path);
-            }
-            catch
-            {
-                return "";
-            }
-        }
+	/*Tries to read a file and handles various exceptions which then return an empty string and writes the exception to the console.
+	
+ 	*/
+	public static string tryReadFile(string path)
+    	{
+	        try
+	        {
+	            return File.ReadAllText(path);
+	        }
+	        catch (DirectoryNotFoundException)
+	        {
+	            Console.WriteLine("api.Helpers.tryReadFile | DirectoryNotFoundException. Returning empty string.");
+	            return "";
+	        }
+	        catch (FileNotFoundException)
+	        {
+	            Console.WriteLine($"api.Helpers.tryReadFile | FileNotFoundException. Creating empty file at path ({path}) & returning empty string.");
+	            CreateEmptyFile(path);
+	            return "";
+	        }
+	        catch (IOException)
+	        {
+	            Console.WriteLine("api.Helpers.tryReadFile | IOException. Race condition. Most likely this process and the MetaTrader EA both trying to access/use the file simultaneously. Returning empty string.");
+	            return "";
+	        }
+    	}
+
+	public static void CreateEmptyFile(string filepath)
+    	{
+		File.Create(filepath).Dispose();
+    	}
     }
 }
