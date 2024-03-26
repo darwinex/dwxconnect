@@ -81,31 +81,53 @@ namespace DWXConnect
  	*/
 	public static string tryReadFile(string path)
     	{
+		fileName = GetFileNameFromPath(path);
+		
 	        try
 	        {
 	            return File.ReadAllText(path);
 	        }
 	        catch (DirectoryNotFoundException)
 	        {
-	            Console.WriteLine("api.Helpers.tryReadFile | DirectoryNotFoundException. Returning empty string.");
+	            Console.WriteLine($"api.Helpers.tryReadFile | {fileName} | DirectoryNotFoundException. Returning empty string.");
 	            return "";
 	        }
 	        catch (FileNotFoundException)
 	        {
-	            Console.WriteLine($"api.Helpers.tryReadFile | FileNotFoundException. Creating empty file at path ({path}) & returning empty string.");
+	            Console.WriteLine($"api.Helpers.tryReadFile | {fileName} | FileNotFoundException. Creating empty file at path ({path}) & returning empty string.");
 	            CreateEmptyFile(path);
 	            return "";
 	        }
 	        catch (IOException)
 	        {
-	            Console.WriteLine("api.Helpers.tryReadFile | IOException. Race condition. Most likely this process and the MetaTrader EA both trying to access/use the file simultaneously. Returning empty string.");
+	            Console.WriteLine("api.Helpers.tryReadFile | {fileName} | IOException. Race condition. Most likely this process and the MetaTrader EA both trying to access/use the file simultaneously. Returning empty string.");
 	            return "";
 	        }
     	}
 
-	private static void CreateEmptyFile(string filepath)
+	private static void CreateEmptyFile(string filePath)
     	{
-		File.Create(filepath).Dispose();
+		File.Create(filePath).Dispose();
+    	}
+
+	private static string GetFileNameFromPath(string path)
+    	{
+	        try
+	        {
+	            return path.Split("\\").Last();
+	        }
+	        catch (Exception)
+	        {
+	            try
+	            {
+	                return path.Split("/").Last();
+	            }
+	            catch (Exception e)
+	            {
+	                Console.WriteLine(e);
+	                throw;
+	            }
+	        }
     	}
     }
 }
