@@ -103,7 +103,7 @@ namespace DWXConnect
 	        }
     	}
 
-	public static void CreateEmptyFile(string filepath)
+	private static void CreateEmptyFile(string filepath)
     	{
 		File.Create(filepath).Dispose();
     	}
