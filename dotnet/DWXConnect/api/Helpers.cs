@@ -100,7 +100,7 @@ namespace DWXConnect
 	        }
 	        catch (IOException)
 	        {
-	            Console.WriteLine("api.Helpers.tryReadFile | {fileName} | IOException. Race condition. Most likely this process and the MetaTrader EA both trying to access/use the file simultaneously. Returning empty string.");
+	            Console.WriteLine($"api.Helpers.tryReadFile | {fileName} | IOException. Race condition. Most likely this process and the MetaTrader EA both trying to access/use the file simultaneously. Returning empty string.");
 	            return "";
 	        }
     	}
