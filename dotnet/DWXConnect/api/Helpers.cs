@@ -81,7 +81,7 @@ namespace DWXConnect
  	*/
 	public static string tryReadFile(string path)
     	{
-		fileName = GetFileNameFromPath(path);
+		var fileName = GetFileNameFromPath(path);
 		
 	        try
 	        {
