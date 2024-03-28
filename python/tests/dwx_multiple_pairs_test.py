@@ -6,7 +6,7 @@ from threading import Thread
 from os.path import join, exists
 from traceback import print_exc
 from random import random
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 sys.path.append('../')
 from api.dwx_client import dwx_client
@@ -26,8 +26,8 @@ class TickProcessor():
                  verbose=True
                  ):
 
-        self.last_open_time = datetime.utcnow()
-        self.last_modification_time = datetime.utcnow()
+        self.last_open_time = datetime.now(timezone.utc)
+        self.last_modification_time = datetime.now(timezone.utc)
 
         self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
@@ -56,8 +56,8 @@ class TickProcessor():
         #                 "USDNOK", "USDSEK", "USDSGD", "USDTRY", "XAGUSD", "XAUUSD"]
 
         self.n_ticks = 0
-        self.start_time = datetime.utcnow()
-        self.last_print_time = datetime.utcnow()
+        self.start_time = datetime.now(timezone.utc)
+        self.last_print_time = datetime.now(timezone.utc)
 
         print(f'Subscribing to {len(self.symbols)} symbols.')
         
@@ -66,7 +66,7 @@ class TickProcessor():
 
     def on_tick(self, symbol, bid, ask):
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         # print('on_tick:', now, symbol, bid, ask)
 
@@ -81,7 +81,7 @@ class TickProcessor():
 
     def on_bar_data(self, symbol, time_frame, time, open_price, high, low, close_price, tick_volume):
         
-        print('on_bar_data:', symbol, time_frame, datetime.utcnow(), time, open_price, high, low, close_price)
+        print('on_bar_data:', symbol, time_frame, datetime.now(timezone.utc), time, open_price, high, low, close_price)
 
 
     def on_historic_data(self, symbol, time_frame, data):
@@ -98,7 +98,7 @@ class TickProcessor():
             # if 'modified' in message['message']:
             #     self.n_modified += 1
             #     if self.n_modified == self.n:
-            #         self.modify_duration = (datetime.utcnow() - self.before_modification).total_seconds()
+            #         self.modify_duration = (datetime.now(timezone.utc) - self.before_modification).total_seconds()
 
     # triggers when an order is added or removed, not when only modified. 
     def on_order_event(self):

@@ -5,7 +5,7 @@ from time import sleep
 from threading import Thread, Lock
 from os.path import join, exists
 from traceback import print_exc
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 
 """Client class
@@ -431,9 +431,9 @@ class dwx_client():
     def get_historic_data(self,
                           symbol='EURUSD',
                           time_frame='D1',
-                          start=(datetime.utcnow() -
+                          start=(datetime.now(timezone.utc) -
                                  timedelta(days=30)).timestamp(),
-                          end=datetime.utcnow().timestamp()):
+                          end=datetime.now(timezone.utc).timestamp()):
 
         # start_date.strftime('%Y.%m.%d %H:%M:00')
         data = [symbol, time_frame,
@@ -597,8 +597,8 @@ class dwx_client():
 
         self.command_id = (self.command_id + 1) % 100000
 
-        end_time = datetime.utcnow() + timedelta(seconds=self.max_retry_command_seconds)
-        now = datetime.utcnow()
+        end_time = datetime.now(timezone.utc) + timedelta(seconds=self.max_retry_command_seconds)
+        now = datetime.now(timezone.utc)
 
         # trying again for X seconds in case all files exist or are 
         # currently read from mql side.
@@ -621,7 +621,7 @@ class dwx_client():
             if success:
                 break
             sleep(self.sleep_delay)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
         
         # release lock again
         self.lock.release()

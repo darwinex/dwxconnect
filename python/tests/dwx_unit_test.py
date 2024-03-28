@@ -8,7 +8,7 @@ from threading import Thread
 from os.path import join, exists
 from traceback import print_exc
 from random import random
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 sys.path.append('../')
 
@@ -69,11 +69,11 @@ class TestDWXConnect(unittest.TestCase):
             self.dwx.open_order(symbol=self.symbol, order_type='buy',
                                 lots=self.lots, price=0, stop_loss=0, take_profit=0,
                                 magic=self.magic_number, comment='', expiration=0)
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=10):
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             if len(self.dwx.open_orders) >= self.num_open_orders:
                 return True
             # in case there was a requote, try again:
@@ -92,13 +92,13 @@ class TestDWXConnect(unittest.TestCase):
 
     def close_all_orders(self):
 
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=10):
             # sometimes it could fail if for example there is a requote. so just try again.
             self.dwx.close_all_orders()
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             # print(self.dwx.open_orders)
             if len(self.dwx.open_orders) == 0:
                 return True
@@ -111,10 +111,10 @@ class TestDWXConnect(unittest.TestCase):
     def subscribe_symbols(self):
 
         self.dwx.subscribe_symbols([self.symbol])
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             try:
                 bid = self.dwx.market_data[self.symbol]['bid']
                 break
@@ -161,12 +161,12 @@ class TestDWXConnect(unittest.TestCase):
     def open_orders(self):
 
         ato = False
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
             self.open_missing_types()
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             # print(self.dwx.open_orders)
             ato = self.all_types_open()
             if ato:
@@ -194,10 +194,10 @@ class TestDWXConnect(unittest.TestCase):
                                   take_profit=tp,
                                   expiration=0)
 
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             all_set = True
             for ticket, order in self.dwx.open_orders.items():
                 if order['TP'] <= 0 or order['SL'] <= 0:
@@ -223,12 +223,12 @@ class TestDWXConnect(unittest.TestCase):
 
         num_orders_before = len(self.dwx.open_orders)
 
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
             self.dwx.close_order(ticket, lots=0)
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             try:
                 num_orders = len(self.dwx.open_orders)
                 if num_orders == num_orders_before-1:
@@ -259,12 +259,12 @@ class TestDWXConnect(unittest.TestCase):
         lots_before = self.dwx.open_orders[ticket]['lots']
         self.assertTrue(lots_before > 0)
 
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
             self.dwx.close_order(ticket, lots=close_lots)
             sleep(2)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             try:
                 # need to loop because the ticket will change after modification.
                 found = False
@@ -370,11 +370,11 @@ class TestDWXConnect(unittest.TestCase):
                 'Could not open all orders in test_close_orders_by_symbol().')
 
         self.dwx.close_orders_by_symbol(self.symbol)
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=10):
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             if len(self.dwx.open_orders) == 0:
                 break
             self.dwx.close_orders_by_symbol(self.symbol)
@@ -393,11 +393,11 @@ class TestDWXConnect(unittest.TestCase):
                 'Could not open all orders in test_close_orders_by_magic().')
 
         self.dwx.close_orders_by_magic(self.magic_number)
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=10):
             sleep(1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             if len(self.dwx.open_orders) == 0:
                 break
             self.dwx.close_orders_by_magic(self.magic_number)
@@ -409,11 +409,11 @@ class TestDWXConnect(unittest.TestCase):
     def test_subscribe_symbols_bar_data(self):
         time_frame = 'M1'
         self.dwx.subscribe_symbols_bar_data([[self.symbol, time_frame]])
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
             sleep(0.1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             try:
                 # no need to check the length since it would trigger an exception if not found.
                 bar_data = self.dwx.bar_data[self.symbol + '_' + time_frame]
@@ -430,14 +430,14 @@ class TestDWXConnect(unittest.TestCase):
 
         time_frame = 'D1'
         self.dwx.get_historic_data(self.symbol, time_frame=time_frame,
-                                   start=(datetime.utcnow() -
+                                   start=(datetime.now(timezone.utc) -
                                           timedelta(days=30)).timestamp(),
-                                   end=datetime.utcnow().timestamp())
-        start_time = datetime.utcnow()
-        now = datetime.utcnow()
+                                   end=datetime.now(timezone.utc).timestamp())
+        start_time = datetime.now(timezone.utc)
+        now = datetime.now(timezone.utc)
         while now < start_time + timedelta(seconds=5):
             sleep(0.1)
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             try:
                 historic_data = self.dwx.historic_data[self.symbol +
                                                        '_' + time_frame]

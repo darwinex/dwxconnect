@@ -5,7 +5,7 @@ from threading import Thread
 from os.path import join, exists
 from traceback import print_exc
 from random import random
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from api.dwx_client import dwx_client
 
@@ -37,8 +37,8 @@ class tick_processor():
         # if true, it will randomly try to open and close orders every few seconds. 
         self.open_test_trades = False
 
-        self.last_open_time = datetime.utcnow()
-        self.last_modification_time = datetime.utcnow()
+        self.last_open_time = datetime.now(timezone.utc)
+        self.last_modification_time = datetime.now(timezone.utc)
 
         self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
@@ -56,14 +56,14 @@ class tick_processor():
         self.dwx.subscribe_symbols_bar_data([['EURUSD', 'M15'], ['GBPJPY', 'M5'], ['AUDCAD', 'M1']])
 
         # request historic data:
-        end = datetime.utcnow()
+        end = datetime.now(timezone.utc)
         start = end - timedelta(days=30)  # last 30 days
         self.dwx.get_historic_data('EURUSD', 'D1', start.timestamp(), end.timestamp())
 
 
     def on_tick(self, symbol, bid, ask):
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         print('on_tick:', now, symbol, bid, ask)
 
@@ -98,7 +98,7 @@ class tick_processor():
 
     def on_bar_data(self, symbol, time_frame, time, open_price, high, low, close_price, tick_volume):
         
-        print('on_bar_data:', symbol, time_frame, datetime.utcnow(), time, open_price, high, low, close_price)
+        print('on_bar_data:', symbol, time_frame, datetime.now(timezone.utc), time, open_price, high, low, close_price)
 
     
     def on_historic_data(self, symbol, time_frame, data):

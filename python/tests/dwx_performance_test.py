@@ -6,7 +6,7 @@ from threading import Thread
 from os.path import join, exists
 from traceback import print_exc
 from random import random
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 sys.path.append('../')
 from api.dwx_client import dwx_client
@@ -34,8 +34,8 @@ class TickProcessor():
                  verbose=True
                  ):
 
-        self.last_open_time = datetime.utcnow()
-        self.last_modification_time = datetime.utcnow()
+        self.last_open_time = datetime.now(timezone.utc)
+        self.last_modification_time = datetime.now(timezone.utc)
 
         self.dwx = dwx_client(self, MT4_directory_path, sleep_delay, 
                               max_retry_command_seconds, verbose=verbose)
@@ -55,7 +55,7 @@ class TickProcessor():
             sleep(1)
 
         self.test_started = True
-        self.before_open = datetime.utcnow()
+        self.before_open = datetime.now(timezone.utc)
         self.open_duration = -100
         for i in range(self.n):
             self.dwx.open_order(symbol=symbol, order_type='buylimit', lots=0.01, price=entry_price)
@@ -65,27 +65,27 @@ class TickProcessor():
             sleep(1)
         
         self.modify_duration = -100
-        self.before_modification = datetime.utcnow()
+        self.before_modification = datetime.now(timezone.utc)
         for ticket in self.dwx.open_orders.keys():
             self.dwx.modify_order(ticket, stop_loss=entry_price-0.01)
         
         sleep(1)
 
-        self.before_close = datetime.utcnow()
+        self.before_close = datetime.now(timezone.utc)
         for ticket in self.dwx.open_orders.keys():
             self.dwx.close_order(ticket)
         
 
     def on_tick(self, symbol, bid, ask):
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         print('on_tick:', now, symbol, bid, ask)
 
 
     def on_bar_data(self, symbol, time_frame, time, open_price, high, low, close_price, tick_volume):
         
-        print('on_bar_data:', symbol, time_frame, datetime.utcnow(), time, open_price, high, low, close_price)
+        print('on_bar_data:', symbol, time_frame, datetime.now(timezone.utc), time, open_price, high, low, close_price)
 
 
     def on_historic_data(self, symbol, time_frame, data):
@@ -103,7 +103,7 @@ class TickProcessor():
             if 'modified' in message['message']:
                 self.n_modified += 1
                 if self.n_modified == self.n:
-                    self.modify_duration = (datetime.utcnow() - self.before_modification).total_seconds()
+                    self.modify_duration = (datetime.now(timezone.utc) - self.before_modification).total_seconds()
 
 
     # triggers when an order is added or removed, not when only modified. 
@@ -115,10 +115,10 @@ class TickProcessor():
             return
         
         if len(self.dwx.open_orders) == self.n:
-            self.open_duration = (datetime.utcnow() - self.before_open).total_seconds()
+            self.open_duration = (datetime.now(timezone.utc) - self.before_open).total_seconds()
             
         elif len(self.dwx.open_orders) == 0:
-            close_duration = (datetime.utcnow() - self.before_close).total_seconds()
+            close_duration = (datetime.now(timezone.utc) - self.before_close).total_seconds()
             print(f'\nopen_duration: {1000*self.open_duration/self.n:.1f} milliseconds per order')
             print(f'modify_duration: {1000*self.modify_duration/self.n:.1f} milliseconds per order')
             print(f'close_duration: {1000*close_duration/self.n:.1f} milliseconds per order')
