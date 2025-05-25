@@ -23,7 +23,7 @@
 
 ## Introduction
 
-DWX Connect enables anyone to write trading strategies in any programming language and trade them at Darwinex. It provides functionality to subscribe to Tick and Bar data, as well as to Trade via MetaTrader 4 or 5 without having to code algorithms in MQL.
+DWX Connect enables anyone to write trading strategies in any programming language and trade them at Darwinex. It provides functionality to subscribe to Tick and Bar data, as well as to Trade via MetaTrader 4 or 5 without having to code algorithms in MQL. **However, this library cannot be used for backtest.**
 
 Its simple, file-based communication mechanism also provides an easy starting point for implementations in other programming languages. 
 
